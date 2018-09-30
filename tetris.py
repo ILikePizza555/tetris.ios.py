@@ -4,7 +4,12 @@ import random
 import math
 A = Action
 
-class MyScene (Scene):
+
+
+class TetrisGame (Scene):
+	"""
+	The main game code for Tetris
+	"""
 	def setup(self):
 		pass
 	
@@ -24,4 +29,4 @@ class MyScene (Scene):
 		pass
 
 if __name__ == '__main__':
-	run(MyScene(), show_fps=False)
+	run(TetrisGame(), PORTRAIT, show_fps=False) 
