@@ -6,6 +6,11 @@ import random
 import math
 A = Action
 
+
+def clamp(x, minimum, maximum):
+	return max(minimum, min(x, maximum))
+
+
 def build_background_grid():
 	parent = Node();
 
@@ -89,8 +94,11 @@ class PieceControl ():
 	def rotate(self):
 		pass
 	
-	def move(self, up=0, right=0, down=0, left=0):
-		pass
+	def move(self, d_col=0, d_row=0):
+		for t in self.tiles:
+			col = clamp(t.col + d_col, 0, COLUMNS)
+			row = clamp(t.row + d_row, 0, ROWS)
+			t.set_pos(col, row)
 
 class TetrisGame(Scene):
 	"""
@@ -110,13 +118,21 @@ class TetrisGame(Scene):
 		# Root node for all game elements
 		self.game_field = Node(parent=self, position=GRID_POS)
 		
-		self.control = PieceControl()
-		
 		# Add the background grid
 		self.bg_grid = build_background_grid()
 		self.game_field.add_child(self.bg_grid)
 		
+		self.control = PieceControl()
+		
 		self.setup_ui()
+		
+	def get_tiles(self):
+		"""
+		Returns an iterator over all tile objects
+		"""
+		for o in self.game_field.children:
+			if isinstance(o, Tile):
+				yield o
 	
 	def did_change_size(self):
 		pass
