@@ -1,4 +1,5 @@
 from scene import *
+from ui import Path
 import sound
 import random
 import math
@@ -6,6 +7,9 @@ A = Action
 
 COLUMNS = 10
 ROWS = 20
+
+GRID_POS = Vector2(10, 20);
+GRID_SIZE= 10;
 
 COLORS = {
 	"bg": "#232323",
@@ -17,12 +21,36 @@ COLORS = {
 	"lime": "92CA49",
 }
 
+def build_background_grid():
+	parent = Node(position=GRID_POS);
+
+	# Parameters to pass to the creation of ShapeNode
+	params = {
+		"path": Path(0, 0, GRID_SIZE, GRID_SIZE * ROWS),
+		"fill_color": "clear",
+		"stroke_color": "lightgrey"
+	}
+	
+	# Building the columns
+	for i in range(COLUMNS):
+		n = ShapeNode(**params)
+		pos = Vector2(i*GRID_SIZE, 0)
+		n.position = pos
+		parent.add_child(n)
+	
+	return parent
+
 class TetrisGame (Scene):
 	"""
 	The main game code for Tetris
 	"""
 	def setup(self):
-		pass
+		self.background_color = COLORS["bg"]
+		self.game_field = Node(parent=self);
+		
+		# Add the background grid
+		self.bg_grid = build_background_grid()
+		self.game_field.add_child(self.bg_grid)
 	
 	def did_change_size(self):
 		pass
@@ -40,4 +68,4 @@ class TetrisGame (Scene):
 		pass
 
 if __name__ == '__main__':
-	run(TetrisGame(), PORTRAIT, show_fps=False) 
+	run(TetrisGame(), PORTRAIT, show_fps=True) 
