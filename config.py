@@ -15,3 +15,14 @@ COLORS = {
 	"green": "327834",
 	"lime": "92CA49",
 }
+
+UI = {
+	"LEFT_BTN": {
+		"texture": 'typw:Left',
+		"position": Vector2(50, 100)
+	},
+	"RIGHT_BTN": {
+		"texture": 'typw:Right',
+		"position": Vector2(150, 100)
+	}
+}
