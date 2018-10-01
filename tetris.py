@@ -107,8 +107,8 @@ class PieceControl ():
 	
 	def move(self, d_col=0, d_row=0):
 		for t in self.tiles:
-			col = clamp(t.col + d_col, 0, COLUMNS)
-			row = clamp(t.row + d_row, 0, ROWS)
+			col = clamp(t.col + d_col, 0, COLUMNS - 1)
+			row = clamp(t.row + d_row, 0, ROWS - 1)
 			t.set_pos(col, row)
 
 class TetrisGame(Scene):
@@ -133,9 +133,10 @@ class TetrisGame(Scene):
 		self.bg_grid = build_background_grid()
 		self.game_field.add_child(self.bg_grid)
 		
-		tst = Tile(COLORS["red"], 5, 19)
-		self.game_field.add_child(tst)
-		self.control = PieceControl([tst])
+		self.drop_timer = INITIAL_FALL_SPEED
+		
+		self.control = PieceControl([])
+		self.spawn_piece()
 		
 		self.setup_ui()
 		
@@ -146,12 +147,41 @@ class TetrisGame(Scene):
 		for o in self.game_field.children:
 			if isinstance(o, Tile):
 				yield o
+				
+	def check_control_collision(self):
+		"""
+		Returns true if any of the tiles in self.control collide (is row-adjacent) with the tiles on the field
+		"""
+		for t in self.control.tiles:
+			if t.row == 0:
+				return True
+			
+			for gt in self.get_tiles():
+				if t.row == gt.row + 1 and t.col == gt.col:
+					return True
+				
+		return False
+		
+	def spawn_piece(self):
+		"""
+		Spawns a new piece on the game field and adds it to self.control
+		"""
+		tst = Tile(COLORS["red"], 5, 19)
+		self.game_field.add_child(tst)
+		self.control.reset([tst])
 	
 	def did_change_size(self):
 		pass
 	
 	def update(self):
-		pass
+		self.drop_timer -= self.dt
+		if self.drop_timer <= 0:
+			self.control.move(d_row=-1)
+			self.drop_timer = INITIAL_FALL_SPEED
+			
+			# Check for intersection and spawn a new piece if needed
+			if self.check_control_collision():
+				self.spawn_piece()
 	
 	def touch_began(self, touch):
 		if intersects_sprite(touch.location, self.left_btn):

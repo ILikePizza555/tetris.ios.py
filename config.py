@@ -26,3 +26,6 @@ UI = {
 		"position": Vector2(150, 100)
 	}
 }
+
+INITIAL_FALL_SPEED = 1
+LOCK_DELAY = 0.5
