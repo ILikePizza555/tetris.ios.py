@@ -140,26 +140,54 @@ class TetrisGame(Scene):
 		
 		self.setup_ui()
 		
-	def get_tiles(self):
+	def get_tiles(self, exclude=[]):
 		"""
 		Returns an iterator over all tile objects
 		"""
 		for o in self.game_field.children:
-			if isinstance(o, Tile):
+			if isinstance(o, Tile) and o not in exclude:
 				yield o
 				
-	def check_control_collision(self):
+	def check_control_row_collision(self):
 		"""
-		Returns true if any of the tiles in self.control collide (is row-adjacent) with the tiles on the field
+		Returns true if any of the tiles in self.control row-collide (is row-adjacent) with the tiles on the field
 		"""
 		for t in self.control.tiles:
 			if t.row == 0:
 				return True
 			
-			for gt in self.get_tiles():
+			for gt in self.get_tiles(exclude=self.control.tiles):
 				if t.row == gt.row + 1 and t.col == gt.col:
 					return True
 				
+		return False
+		
+	def check_left_collision(self):
+		"""
+		Checks the left side of the control piece for collision
+		"""
+		for t in self.control.tiles:
+			if t.col == 0:
+				return True
+		
+			for gt in self.get_tiles(exclude=self.control.tiles):
+				if t.col == gt.col + 1 and t.row == gt.row:
+					return True
+		
+		return False
+		
+	def check_right_collision(self):
+		"""
+		Check the right side of the control piece for collision
+		"""
+		for t in self.control.tiles:
+			if t.col == COLUMNS - 1:
+				return True
+			
+			for gt in self.get_tiles(exclude=self.control.tiles):
+				if t.col == gt.col - 1 and t.row == gt.row:
+					return True
+			
 		return False
 		
 	def spawn_piece(self):
@@ -188,13 +216,13 @@ class TetrisGame(Scene):
 			self.drop_timer = INITIAL_FALL_SPEED
 			
 			# Check for intersection and spawn a new piece if needed
-			if self.check_control_collision():
+			if self.check_control_row_collision():
 				self.spawn_piece()
 	
 	def touch_began(self, touch):
-		if intersects_sprite(touch.location, self.left_btn):
+		if intersects_sprite(touch.location, self.left_btn) and not self.check_left_collision():
 			self.control.move(-1)
-		elif intersects_sprite(touch.location, self.right_btn):
+		elif intersects_sprite(touch.location, self.right_btn) and not self.check_right_collision():
 			self.control.move(1)
 	
 	def touch_moved(self, touch):
