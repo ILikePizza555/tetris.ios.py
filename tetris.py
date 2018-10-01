@@ -70,12 +70,12 @@ class Tile(SpriteNode):
 		"""
 		Sets the position of the tile in the grid.
 		"""
-		if col >= COLUMNS:
-			raise ValueError(f"col={col} is larger than COLUMNS={COLUMNS}")
+		if col < 0:
+			raise ValueError(f"col={col} is less than 0")
 		
-		if row >= ROWS:
+		if row < 0:
 			raise 
-			ValueError(f"row={row} is larger than ROWS={ROWS}")
+			ValueError(f"row={row} is less than 0")
 		
 		self.col = col
 		self.row = row
@@ -166,9 +166,17 @@ class TetrisGame(Scene):
 		"""
 		Spawns a new piece on the game field and adds it to self.control
 		"""
-		tst = Tile(COLORS["red"], 5, 19)
-		self.game_field.add_child(tst)
-		self.control.reset([tst])
+		template = random.choice(PIECES)
+		color = template[0]
+		positions = template[1:]
+		
+		tiles = []
+		for p in positions:
+			t = Tile(color, *p)
+			self.game_field.add_child(t)
+			tiles.append(t)
+		
+		self.control.reset(tiles)
 	
 	def did_change_size(self):
 		pass
