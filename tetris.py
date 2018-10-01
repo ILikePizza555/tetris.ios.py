@@ -40,7 +40,8 @@ def build_background_grid():
 		parent.add_child(n)
 		
 	return parent
-	
+
+
 class Tile(SpriteNode):
 	"""
 	A single tile on the grid.
@@ -56,6 +57,13 @@ class Tile(SpriteNode):
 		"""
 		Sets the position of the tile in the grid.
 		"""
+		if col >= COLUMNS:
+			raise ValueError(f"col={col} is larger than COLUMNS={COLUMNS}")
+		
+		if row >= ROWS:
+			raise 
+			ValueError(f"row={row} is larger than ROWS={ROWS}")
+		
 		pos = Vector2()
 		pos.x = col * self.size.w
 		pos.y = row * self.size.h
@@ -75,8 +83,6 @@ class TetrisGame(Scene):
 		# Add the background grid
 		self.bg_grid = build_background_grid()
 		self.game_field.add_child(self.bg_grid)
-		
-		self.game_field.add_child(Tile(COLORS["orange"], 5, 6))
 	
 	def did_change_size(self):
 		pass
