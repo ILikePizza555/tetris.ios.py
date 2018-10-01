@@ -7,7 +7,7 @@ import math
 A = Action
 
 def build_background_grid():
-	parent = Node(position=GRID_POS);
+	parent = Node();
 
 	# Parameters to pass to the creation of ShapeNode
 	params = {
@@ -40,18 +40,43 @@ def build_background_grid():
 		parent.add_child(n)
 		
 	return parent
+	
+class Tile(SpriteNode):
+	"""
+	A single tile on the grid.
+	"""
+	def __init__(self, color, col=0, row=0):
+		SpriteNode.__init__(self, 'pzl:Gray3')
+		self.color = color
+		self.size = (GRID_SIZE, GRID_SIZE)
+		self.anchor_point = (0, 0)
+		self.set_pos(col, row)
+	
+	def set_pos(self, col=0, row=0):
+		"""
+		Sets the position of the tile in the grid.
+		"""
+		pos = Vector2()
+		pos.x = col * self.size.w
+		pos.y = row * self.size.h
+		self.position = pos
+		
 
-class TetrisGame (Scene):
+class TetrisGame(Scene):
 	"""
 	The main game code for Tetris
 	"""
 	def setup(self):
 		self.background_color = COLORS["bg"]
-		self.game_field = Node(parent=self);
+		
+		# Root node for all game elements
+		self.game_field = Node(parent=self, position=GRID_POS);
 		
 		# Add the background grid
 		self.bg_grid = build_background_grid()
 		self.game_field.add_child(self.bg_grid)
+		
+		self.game_field.add_child(Tile(COLORS["orange"], 5, 6))
 	
 	def did_change_size(self):
 		pass
