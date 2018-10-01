@@ -12,8 +12,11 @@ COLORS = {
 	"grey": "#646473",
 	"blue": "#786CF5",
 	"orange": "#FF8C32",
-	"green": "327834",
-	"lime": "92CA49",
+	"green": "#327834",
+	"lime": "#92CA49",
+	"purple": "#bc36ff",
+	"cyan": "#a1ffff",
+	"yellow": "#ffff00"
 }
 
 UI = {
@@ -26,6 +29,12 @@ UI = {
 		"position": Vector2(150, 100)
 	}
 }
+
+PIECES = [
+	(COLORS["cyan"], (3, ROWS), (4, ROWS), (5, ROWS), (6, ROWS)),
+	(COLORS["yellow"], (4, ROWS), (5, ROWS), (4, ROWS-1), (5, ROWS-1)),
+	(COLORS["purple"], (4, ROWS), (3, ROWS-1), (4, ROWS-1), (5, ROWS-1))
+]
 
 INITIAL_FALL_SPEED = 1
 LOCK_DELAY = 0.5
