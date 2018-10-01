@@ -11,6 +11,10 @@ def clamp(x, minimum, maximum):
 	return max(minimum, min(x, maximum))
 
 
+def intersects_sprite(point, sprite):
+	return (point.x >= sprite.position.x and point.x <= sprite.position.x + sprite.size.w) and (point.y >= sprite.position.y and point.y <= sprite.position.y + sprite.size.h)
+
+
 def build_background_grid():
 	parent = Node();
 
@@ -69,6 +73,9 @@ class Tile(SpriteNode):
 			raise 
 			ValueError(f"row={row} is larger than ROWS={ROWS}")
 		
+		self.col = col
+		self.row = row
+		
 		pos = Vector2()
 		pos.x = col * self.size.w
 		pos.y = row * self.size.h
@@ -122,7 +129,9 @@ class TetrisGame(Scene):
 		self.bg_grid = build_background_grid()
 		self.game_field.add_child(self.bg_grid)
 		
-		self.control = PieceControl()
+		tst = Tile(COLORS["red"], 5, 19)
+		self.game_field.add_child(tst)
+		self.control = PieceControl([tst])
 		
 		self.setup_ui()
 		
@@ -141,7 +150,12 @@ class TetrisGame(Scene):
 		pass
 	
 	def touch_began(self, touch):
-		pass
+		if intersects_sprite(touch.location, self.left_btn):
+			print("Left")
+			self.control.move(-1)
+		elif intersects_sprite(touch.location, self.right_btn):
+			print("Right")
+			self.control.move(1)
 	
 	def touch_moved(self, touch):
 		pass
