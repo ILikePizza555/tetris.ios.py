@@ -1,10 +1,10 @@
-from scene import Vector2
+from scene import Vector2, get_screen_size
 
 COLUMNS = 10
 ROWS = 20
 
-GRID_POS = Vector2(10, 20);
-GRID_SIZE= 10;
+GRID_POS = Vector2(10, 150);
+GRID_SIZE= 20;
 
 COLORS = {
 	"bg": "#232323",

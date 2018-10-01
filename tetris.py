@@ -16,14 +16,29 @@ def build_background_grid():
 		"stroke_color": "lightgrey"
 	}
 	
+	anchor = Vector2(0, 0)
+	
 	# Building the columns
 	for i in range(COLUMNS):
 		n = ShapeNode(**params)
 		pos = Vector2(i*GRID_SIZE, 0)
+		
 		n.position = pos
-		n.anchor_point = Vector2(0,0)
+		n.anchor_point = anchor
+		
 		parent.add_child(n)
 	
+	# Building the rows
+	params["path"] = Path.rect(0, 0, GRID_SIZE * COLUMNS, GRID_SIZE)
+	for i in range(ROWS):
+		n = ShapeNode(**params)
+		pos = Vector2(0, i*GRID_SIZE)
+		
+		n.position = pos
+		n.anchor_point = anchor
+		
+		parent.add_child(n)
+		
 	return parent
 
 class TetrisGame (Scene):
