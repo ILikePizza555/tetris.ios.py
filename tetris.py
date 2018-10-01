@@ -26,7 +26,7 @@ def build_background_grid():
 
 	# Parameters to pass to the creation of ShapeNode
 	params = {
-		"path": Path(0, 0, GRID_SIZE, GRID_SIZE * ROWS),
+		"path": Path.rect(0, 0, GRID_SIZE, GRID_SIZE * ROWS),
 		"fill_color": "clear",
 		"stroke_color": "lightgrey"
 	}
@@ -36,6 +36,7 @@ def build_background_grid():
 		n = ShapeNode(**params)
 		pos = Vector2(i*GRID_SIZE, 0)
 		n.position = pos
+		n.anchor_point = Vector2(0,0)
 		parent.add_child(n)
 	
 	return parent
